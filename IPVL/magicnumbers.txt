@@ -1,5 +1,7 @@
-﻿.bmp	42 4D
+﻿.bmp	42-4D
 .jpg	FFD8
+.txt	00-00-00-00-00
+.pdf	24-50-44-46
 
 
-http://billatnapier.wordpress.com/2013/04/22/magic-numbers-in-files/
+

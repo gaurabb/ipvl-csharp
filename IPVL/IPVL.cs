@@ -101,14 +101,15 @@ namespace IPVL
             #region Local Variables Declarations/Definitions
             /* Local Variable Declarations */
             int MAX_ALLOWED_FILE_SIZE = 1813345; //ToDo: Initialize from the configuration file
-            string[] VALID_FILE_EXTENSIONS = { ".xls", ".pdf", ".txt", ".php", ".gif", ".tif", ".bmp" }; //ToDo: Initialize from the configuration file
+            string[] VALID_FILE_EXTENSIONS = { ".xls", ".pdf", ".txt", ".php", ".gif", ".tif", ".bmp", ".jpg" }; //ToDo: Initialize from the configuration file
+            
             FileInfo infoFileToValidate;
             
             #endregion
 
             /*Log the input path provided by the end user*/
             WriteToErrorLogFile("************************ " + DateTime.Now.ToString() + " ************************");
-            WriteToErrorLogFile("The file path supplied: " + inputFilePath);
+            WriteToErrorLogFile("The file path provided to the validator: " + inputFilePath);
             
             #region Validate File Path
 
@@ -158,8 +159,10 @@ namespace IPVL
             #region Validate File Extension
             /*
              * VALIDATE FILE EXTENSION
-             */
-            if(Array.IndexOf(VALID_FILE_EXTENSIONS, infoFileToValidate.Extension.ToString()) != -1)
+             */     
+
+            #region InLine Extension Validation Code
+            if (Array.IndexOf(VALID_FILE_EXTENSIONS, infoFileToValidate.Extension.ToString()) != -1)
             {
                 WriteToErrorLogFile("The file has a valid extension. The extension of the file is: " + infoFileToValidate.Extension.ToString());
                 GLOBAL_RESULTS = true;
@@ -172,7 +175,9 @@ namespace IPVL
 
             #endregion
 
-            #region Validate File Content
+            #endregion
+
+            #region Validate File Content - Magic Numbers
             try
             {
                 //1. Read the first 10 bytes from the file
