@@ -1,0 +1,20 @@
+﻿All validations have server side validation irrespective of client side validations
+"Bad" files are not persisted on the server
+		Allowed maximum size of the uploaded file is defined
+		Size of the uploaded file is restricted to a reasonable maximum value
+		A whitelist of allowed file extensions is defined
+		Uploaded file extension is validated against the pre-defined whitelist of allowed file types
+		A Blacklist of disallowed file extensions is not used
+	User supplied file names are not used
+	System generated file names are used
+	File upload location is system defined
+	User controlled values are not used to determine file upload location
+Uploaded files are not stored on system drive on server
+Files are uploaded outside the web root directory
+		Uploaded files are virus scanned before execution (if applicable)
+		Uploaded files are audited periodically and removed if not needed
+The MIME type of the uploaded file is checked for allowed MIME types
+A magic number check is performed
+For compressed file uploads, contents of the compressed file is checked one by one as a new file
+New uploads do not overwrite previously uploaded files
+Execute permissions are not granted on the upload folder 

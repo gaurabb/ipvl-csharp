@@ -1,0 +1,18 @@
+5/16/2014 11:58:40 AM
+C:\Users\gbhattacharjee\Desktop\Rough Notes.txt
+5/16/2014 12:01:24 PM
+C:\Users\gbhattacharjee\Desktop\Rough Notes.txt
+5/16/2014 12:01:24 PM
+The file size is valid. The size of the file is: 4682
+5/16/2014 12:19:58 PM
+C:\Users\gbhattacharjee\Desktop\Rough Notes.txt
+5/16/2014 12:19:58 PM
+The file size is valid. The size of the file in BYTES is: 4682
+5/16/2014 12:19:58 PM
+The file has a valid extension. The extension of the file is: .txt
+5/16/2014 12:20:26 PM
+C:\Users\gbhattacharjee\Desktop\PHP-Code-Review-Reference.docx
+5/16/2014 12:20:26 PM
+The file size is invalid/out of bounds for this functionality. The size of the file in BYTES is: 14949
+5/16/2014 12:20:26 PM
+The file has an invalid extension that is not allowed. The extension of the file is: .docx

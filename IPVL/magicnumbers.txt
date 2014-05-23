@@ -1,0 +1,5 @@
+﻿.bmp	42 4D
+.jpg	FFD8
+
+
+http://billatnapier.wordpress.com/2013/04/22/magic-numbers-in-files/
