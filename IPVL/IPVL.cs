@@ -19,7 +19,8 @@ namespace IPVL
         bool GLOBAL_RESULTS = false;
         //Default Log file path. If it does not exist then the constructor will create the file. ToDo: A better path will work!
         string GLOBAL_LOGFILEPATH = @"Errors.txt";
-
+        string[] DEFAULT_MAGIC_NUMBERS = { ".bmp=42-4D", ".jpg=FF-D8", ".doc=D0-CF-11-E0-A1-B1-1A-E1", ".pdf=25-50-44-46", ".docx=50-4B-03-04" };
+        string[] VALID_FILE_EXTENSIONS = { ".xls", ".pdf", ".gif", ".tif", ".bmp", ".jpg", ".docx" }; //ToDo: Initialize from the configuration file
         #endregion
 
         #region Constructor Function
@@ -28,17 +29,41 @@ namespace IPVL
         /// </summary>
         public IPVL()
         {
-            /*Creates a log file  to write all he statuses to in Application Startup path*/
+            /*Creates a log file  to write all the statuses to in Application Startup path*/
             if (!File.Exists("Errors.txt"))
             {
                 try
                 {
-                    File.Create(@"Errors.txt");
+                    File.Create(@"Errors.txt").Close();
                     WriteToErrorLogFile("Log file created on: " + DateTime.Now.ToString() + ". This file to be used if the invoking app does not provide a different error log");
                 }
                 catch (Exception ex)
                 {
                     throw ex;
+                }
+            }
+
+            /*Checks for magicnumbers.txt file in the root; creates one if not found with the default set of extension - magic number mappings */
+            if (!File.Exists("magicnumbers.txt"))
+            {
+                try
+                {
+                    File.Create(@"magicnumbers.txt").Close();
+                    WriteToErrorLogFile("Default Magic Numbers file created on: " + DateTime.Now.ToString() + ".");
+                    //Write the default File Type and Magic Numbers into the text file
+                    using (StreamWriter txtMagicNumWriter = new StreamWriter("magicnumbers.txt"))
+                    {
+                        for (int i = 0; i < DEFAULT_MAGIC_NUMBERS.Length; i++)
+                        {
+                            txtMagicNumWriter.WriteLine(DEFAULT_MAGIC_NUMBERS[i]);
+                        }
+                    }
+                    
+                }
+                catch (Exception ex)
+                {
+                    //throw ex;
+                    WriteToErrorLogFile(ex.ToString());
                 }
             }
         }
@@ -101,8 +126,6 @@ namespace IPVL
             #region Local Variables Declarations/Definitions
             /* Local Variable Declarations */
             int MAX_ALLOWED_FILE_SIZE = 1813345; //ToDo: Initialize from the configuration file
-            string[] VALID_FILE_EXTENSIONS = { ".xls", ".pdf", ".txt", ".php", ".gif", ".tif", ".bmp", ".jpg" }; //ToDo: Initialize from the configuration file
-            
             FileInfo infoFileToValidate;
             
             #endregion
@@ -178,18 +201,39 @@ namespace IPVL
             #endregion
 
             #region Validate File Content - Magic Numbers
+
+            WriteToErrorLogFile("------------STARTING THE MAGIC NUMBER CHECK----------------");
+            
+            var expectedMaginNumber = File
+            .ReadAllLines("magicnumbers.txt")
+            .Select(x => x.Split('='))
+            .Where(x => x.Length > 1)
+            .ToDictionary(x => x[0].Trim(), x => x[1]);
+           
             try
             {
-                //1. Read the first 10 bytes from the file
-                byte[] testByte = new byte[10];
+                WriteToErrorLogFile("Read the first 10 bytes from the file to validate");
+                byte[] first10Bytes = new byte[10];
                 using (BinaryReader reader = new BinaryReader(new FileStream(inputFilePath, FileMode.Open)))
                 {
-                    reader.Read(testByte, 0, 10);
+                    reader.Read(first10Bytes, 0, 10);
                 }
-               // File.WriteAllBytes(GLOBAL_LOGFILEPATH, testByte);
-                WriteToErrorLogFile(BitConverter.ToString(testByte).ToString());
+                WriteToErrorLogFile("Done. First 10 BYTES of upload file look like: ");
+                WriteToErrorLogFile(BitConverter.ToString(first10Bytes));
+
+                ////if (BitConverter.ToString(first10Bytes).StartsWith("42-4D"))
+                if (BitConverter.ToString(first10Bytes).StartsWith(expectedMaginNumber[infoFileToValidate.Extension.ToString()]))
+                {
+                    WriteToErrorLogFile("The file content matches the content signatue expected. The file is valid.");
+                    GLOBAL_RESULTS = true;
+                }
+                else
+                {
+                    WriteToErrorLogFile("The file content does not match the content signatue expected. The file is possibly invalid.");
+                    GLOBAL_RESULTS = false;
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 WriteToErrorLogFile("There is an error determining the ContentType of the file being validated: " + ex.Message.ToString());
             }

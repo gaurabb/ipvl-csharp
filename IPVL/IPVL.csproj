@@ -42,27 +42,13 @@
   <ItemGroup>
     <Compile Include="IIPVL.cs" />
     <Compile Include="IPVL.cs" />
-    <Compile Include="IPVLResource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>IPVLResource.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="IPVLChecks.txt" />
-    <Content Include="magicnumbers.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="IPVLResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>IPVLResource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <Content Include="magicnumbers.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
