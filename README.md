@@ -2,10 +2,10 @@ ipvl - input validation library
 ================================
 *[Still Work In Progress]*
 
-**Input Validation Library - C#** 
+**Secure Input Validation Library - C#** 
 
 
-File Upload Checks
+Secure File Upload Checks
 ===================
 - File exists
 - File size validation
