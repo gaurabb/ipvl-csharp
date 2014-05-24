@@ -1,9 +1,19 @@
-ipvl
-====
-[Still Work In Progress]
-Input Validation Library - C#
+ipvl - input validation library
+================================
+*[Still Work In Progress]*
 
-How Magic Number Checks done?
+** Input Validation Library - C#** 
+
+
+File Upload Checks
+===================
+- File exists
+- File size validation
+- File extension validation
+- File magic number validation
+
+How File Extension and Magic Number Checks done?
+-------------------------------------------------
 
 1) The code will first check for the extension of the uploaded file.
 2) If the extension is in the whitelist then the magic number check will be performed.

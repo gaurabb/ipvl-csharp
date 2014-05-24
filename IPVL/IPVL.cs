@@ -218,10 +218,10 @@ namespace IPVL
                 {
                     reader.Read(first10Bytes, 0, 10);
                 }
+                
                 WriteToErrorLogFile("Done. First 10 BYTES of upload file look like: ");
                 WriteToErrorLogFile(BitConverter.ToString(first10Bytes));
-
-                ////if (BitConverter.ToString(first10Bytes).StartsWith("42-4D"))
+                
                 if (BitConverter.ToString(first10Bytes).StartsWith(expectedMaginNumber[infoFileToValidate.Extension.ToString()]))
                 {
                     WriteToErrorLogFile("The file content matches the content signatue expected. The file is valid.");

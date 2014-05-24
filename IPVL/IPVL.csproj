@@ -46,9 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="IPVLChecks.txt" />
-    <Content Include="magicnumbers.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="magicnumbers.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
