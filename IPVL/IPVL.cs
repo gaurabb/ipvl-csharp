@@ -20,7 +20,8 @@ namespace IPVL
         //Default Log file path. If it does not exist then the constructor will create the file. ToDo: A better path will work!
         string GLOBAL_LOGFILEPATH = @"Errors.txt";
         string[] DEFAULT_MAGIC_NUMBERS = { ".bmp=42-4D", ".jpg=FF-D8", ".doc=D0-CF-11-E0-A1-B1-1A-E1", ".pdf=25-50-44-46", ".docx=50-4B-03-04" };
-        string[] VALID_FILE_EXTENSIONS = { ".xls", ".pdf", ".gif", ".tif", ".bmp", ".jpg", ".docx" }; //ToDo: Initialize from the configuration file
+        string[] INITIALIZE_VALID_FILE_EXTENSIONS = { ".xls", ".pdf", ".gif", ".tif", ".bmp", ".jpg", ".docx" }; //ToDo: Initialize from the configuration file
+        int MAX_ALLOWED_FILE_SIZE = 1813345; //Donot have to move it to the configuration file as the user has the option to pass the file size to the method call
         #endregion
 
         #region Constructor Function
@@ -35,7 +36,7 @@ namespace IPVL
                 try
                 {
                     File.Create(@"Errors.txt").Close();
-                    WriteToErrorLogFile("Log file created on: " + DateTime.Now.ToString() + ". This file to be used if the invoking app does not provide a different error log");
+                    WriteToErrorLogFile("Log file created on: " + DateTime.Now.ToString() + ".");
                 }
                 catch (Exception ex)
                 {
@@ -43,6 +44,31 @@ namespace IPVL
                 }
             }
 
+            /*Create a Configuration file if one does not exist in the root
+             * This file will contain the values that will need to be configurable like maximum allowed file size and file extensions
+             */
+            if (!File.Exists("IPVLConfig.txt"))
+            {
+                try
+                {
+                    File.Create(@"IPVLConfig.txt").Close();
+                    WriteToErrorLogFile("IPVL's Configuration file created on: " + DateTime.Now.ToString() + ".");
+                    //Write the basic configuration settings into the configuration file
+                    using (StreamWriter txIPVLConfigWriter = new StreamWriter("IPVLConfig.txt"))
+                    {
+                        foreach (string EXT in INITIALIZE_VALID_FILE_EXTENSIONS)
+                        {
+                            txIPVLConfigWriter.Write(EXT+",");
+                        }                       
+                    }
+                }
+                catch(Exception ex)
+                {
+                    WriteToErrorLogFile(ex.ToString());
+                }
+            }
+
+            
             /*Checks for magicnumbers.txt file in the root; creates one if not found with the default set of extension - magic number mappings */
             if (!File.Exists("magicnumbers.txt"))
             {
@@ -62,7 +88,6 @@ namespace IPVL
                 }
                 catch (Exception ex)
                 {
-                    //throw ex;
                     WriteToErrorLogFile(ex.ToString());
                 }
             }
@@ -125,9 +150,8 @@ namespace IPVL
         {
             #region Local Variables Declarations/Definitions
             /* Local Variable Declarations */
-            int MAX_ALLOWED_FILE_SIZE = 1813345; //ToDo: Initialize from the configuration file
-            FileInfo infoFileToValidate;
-            
+            //int MAX_ALLOWED_FILE_SIZE = 1813345; //ToDo: Initialize from the configuration file
+            FileInfo infoFileToValidate;            
             #endregion
 
             /*Log the input path provided by the end user*/
@@ -185,6 +209,9 @@ namespace IPVL
              */     
 
             #region InLine Extension Validation Code
+            //Read the allowed extensions from the IPVLConfiguration file
+            string Extentions = File.ReadAllText("IPVLConfig.txt");
+            string[] VALID_FILE_EXTENSIONS = Extentions.Split(',');
             if (Array.IndexOf(VALID_FILE_EXTENSIONS, infoFileToValidate.Extension.ToString()) != -1)
             {
                 WriteToErrorLogFile("The file has a valid extension. The extension of the file is: " + infoFileToValidate.Extension.ToString());
@@ -224,18 +251,19 @@ namespace IPVL
                 
                 if (BitConverter.ToString(first10Bytes).StartsWith(expectedMaginNumber[infoFileToValidate.Extension.ToString()]))
                 {
-                    WriteToErrorLogFile("The file content matches the content signatue expected. The file is valid.");
+                    WriteToErrorLogFile("The file content matches the content signature expected. The file is valid.");
                     GLOBAL_RESULTS = true;
                 }
                 else
                 {
-                    WriteToErrorLogFile("The file content does not match the content signatue expected. The file is possibly invalid.");
+                    WriteToErrorLogFile("The file content does not match the content signature expected. The file is possibly invalid.");
                     GLOBAL_RESULTS = false;
                 }
             }
             catch (Exception ex)
             {
                 WriteToErrorLogFile("There is an error determining the ContentType of the file being validated: " + ex.Message.ToString());
+                GLOBAL_RESULTS = false;
             }
 
             #endregion
