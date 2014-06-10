@@ -149,8 +149,6 @@ namespace IPVL
         public bool ValidateFileUpload(string inputFilePath, int maxAllowedFileSize)
         {
             #region Local Variables Declarations/Definitions
-            /* Local Variable Declarations */
-            //int MAX_ALLOWED_FILE_SIZE = 1813345; //ToDo: Initialize from the configuration file
             FileInfo infoFileToValidate;            
             #endregion
 
